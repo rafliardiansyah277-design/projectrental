@@ -26,19 +26,54 @@ public class hapusunit extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        searchhapus = new javax.swing.JTextField();
+        buttondelete = new javax.swing.JButton();
+
+        searchhapus.setForeground(new java.awt.Color(102, 102, 102));
+        searchhapus.setText("Masukkan ID, Merk Mobil, Transmisi, Ukuran");
+        searchhapus.addActionListener(this::searchhapusActionPerformed);
+
+        buttondelete.setBackground(new java.awt.Color(102, 255, 102));
+        buttondelete.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        buttondelete.setText("Cari Unit");
+        buttondelete.addActionListener(this::buttondeleteActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(searchhapus, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(buttondelete, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(searchhapus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(buttondelete)
+                .addContainerGap(237, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void searchhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchhapusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchhapusActionPerformed
+
+    private void buttondeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttondeleteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttondeleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttondelete;
+    private javax.swing.JTextField searchhapus;
     // End of variables declaration//GEN-END:variables
 }

@@ -60,8 +60,6 @@ public class Registrasi extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("No. Telepon");
 
-        stringpassword.setText("jPasswordField1");
-
         buttonsignup.setText("Sign Up");
         buttonsignup.addActionListener(this::buttonsignupActionPerformed);
 
@@ -70,6 +68,7 @@ public class Registrasi extends javax.swing.JFrame {
         switchbutton.setText("Back to Login Page");
         switchbutton.setBorder(null);
         switchbutton.setBorderPainted(false);
+        switchbutton.setContentAreaFilled(false);
         switchbutton.addActionListener(this::switchbuttonActionPerformed);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -164,7 +163,8 @@ public class Registrasi extends javax.swing.JFrame {
     }//GEN-LAST:event_stringnomorActionPerformed
 
     private void switchbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_switchbuttonActionPerformed
-
+        new Login().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_switchbuttonActionPerformed
 
     private void buttonsignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonsignupActionPerformed

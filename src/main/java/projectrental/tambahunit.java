@@ -8,14 +8,25 @@ package projectrental;
  *
  * @author user dell 7420
  */
-public class tambahunit extends javax.swing.JPanel {
+import db.testdatabase;
+import java.awt.Color;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
+public class tambahunit extends javax.swing.JPanel {
+     private String selectedImagePath = "";
     /**
      * Creates new form tambahunit
      */
     public tambahunit() {
         initComponents();
+        buttontambahunit.addActionListener(this::buttontambahunitActionPerformed);
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,19 +37,202 @@ public class tambahunit extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        inputmerk = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        inputplatnomor = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        inputtransmisi = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        inputkursi = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        inputperiode = new javax.swing.JTextField();
+        inputharga = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        buttontambahunit = new javax.swing.JButton();
+        addphoto = new javax.swing.JButton();
+
+        jLabel1.setText("Merk Mobil");
+
+        inputmerk.addActionListener(this::inputmerkActionPerformed);
+
+        jLabel2.setText("Plat Nomor");
+
+        jLabel3.setText("Transmisi");
+
+        jLabel4.setText("Jumlah Kursi");
+
+        jLabel5.setText("Periode");
+
+        jLabel6.setText("Harga");
+
+        buttontambahunit.setBackground(new java.awt.Color(51, 255, 0));
+        buttontambahunit.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        buttontambahunit.setText("Tambahkan Unit");
+        buttontambahunit.addActionListener(this::buttontambahunitActionPerformed);
+
+        addphoto.setText("+add photos");
+        addphoto.setBorder(null);
+        addphoto.setBorderPainted(false);
+        addphoto.setContentAreaFilled(false);
+        addphoto.addActionListener(this::addphotoActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(inputperiode, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                        .addGap(343, 343, 343))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(buttontambahunit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(inputharga, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(60, 60, 60))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(inputkursi, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(inputtransmisi, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inputplatnomor, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inputmerk, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addphoto)
+                        .addGap(128, 128, 128))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputmerk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addphoto))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(inputplatnomor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(inputtransmisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(inputkursi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputperiode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputharga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(buttontambahunit)
+                .addContainerGap(61, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void inputmerkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputmerkActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputmerkActionPerformed
+
+    private void buttontambahunitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttontambahunitActionPerformed
+        String brand = inputmerk.getText().trim();
+        String plate = inputplatnomor.getText().trim();
+        String trans = inputtransmisi.getText().trim();
+        String size = inputkursi.getText().trim();
+        String priceStr = inputharga.getText().trim();
+
+        if (brand.isEmpty() || plate.isEmpty() || priceStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Mohon lengkapi data minimal Merk, Plat, dan Harga!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        double price = 0;
+        try {
+            priceStr = priceStr.replaceAll("[^\\d]", "");
+            price = Double.parseDouble(priceStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Harga tidak valid!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (Connection conn = testdatabase.getKoneksi()) {
+            String sql = "INSERT INTO cars (brand, size, transmission, plate_number, price_per_hour, status, image, created_at, updated_at) " +
+                         "VALUES (?, ?, ?, ?, ?, 'available', ?, NOW(), NOW())";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, brand);
+                stmt.setString(2, size);
+                stmt.setString(3, trans);
+                stmt.setString(4, plate);
+                stmt.setDouble(5, price);
+                stmt.setString(6, ""); // Placeholder image path
+                stmt.executeUpdate();
+                
+                JOptionPane.showMessageDialog(this, "Unit berhasil ditambahkan ke database!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+                
+                // Reset text fields
+                inputmerk.setText("");
+                inputplatnomor.setText("");
+                inputtransmisi.setText("");
+                inputkursi.setText("");
+                inputperiode.setText("");
+                inputharga.setText("");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Gagal menambahkan unit:\n" + ex.getMessage(), "Error Database", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_buttontambahunitActionPerformed
+
+    private void addphotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addphotoActionPerformed
+       
+        addphoto.setBackground(Color.WHITE);
+        addphoto.setFocusPainted(false);
+        addphoto.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File file = chooser.getSelectedFile();
+                selectedImagePath = file.getAbsolutePath();
+                addphoto.setText(file.getName());
+            }
+        });
+    }//GEN-LAST:event_addphotoActionPerformed
+
+   
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addphoto;
+    private javax.swing.JButton buttontambahunit;
+    private javax.swing.JTextField inputharga;
+    private javax.swing.JTextField inputkursi;
+    private javax.swing.JTextField inputmerk;
+    private javax.swing.JTextField inputperiode;
+    private javax.swing.JTextField inputplatnomor;
+    private javax.swing.JTextField inputtransmisi;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     // End of variables declaration//GEN-END:variables
 }

@@ -166,9 +166,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JPasswordField" name="stringpassword">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="buttonsignup">
               <Properties>
@@ -191,6 +188,7 @@
                   <Border info="null"/>
                 </Property>
                 <Property name="borderPainted" type="boolean" value="false"/>
+                <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="switchbuttonActionPerformed"/>

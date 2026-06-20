@@ -4,6 +4,12 @@
  */
 package projectrental;
 
+import db.testdatabase;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import org.mindrot.jbcrypt.BCrypt;
 /**
  *
  * @author user dell 7420
@@ -48,8 +54,6 @@ public class Login extends javax.swing.JFrame {
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel18.setText("Password");
 
-        inputpassword.setText("jPasswordField1");
-
         buttonlogin.setText("Login");
         buttonlogin.addActionListener(this::buttonloginActionPerformed);
 
@@ -58,6 +62,7 @@ public class Login extends javax.swing.JFrame {
         switchregist.setText("Back to Sign Up Page");
         switchregist.setBorder(null);
         switchregist.setBorderPainted(false);
+        switchregist.setContentAreaFilled(false);
         switchregist.addActionListener(this::switchregistActionPerformed);
 
         jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -149,11 +154,68 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonloginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonloginActionPerformed
-        // TODO add your handling code here:
+        
+       String email = inputemail.getText().trim();
+    String password = new String(inputpassword.getPassword());
+    // 2. Validasi input kosong
+    if (email.isEmpty() || password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, 
+            "Email dan Password tidak boleh kosong!", 
+            "Peringatan", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    // 3. Hubungkan ke database dan cari user dengan role 'admin'
+    try (Connection conn = testdatabase.getKoneksi()) {
+        String sql = "SELECT id, name, password FROM users WHERE email = ? AND role = 'admin'";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String hashedPassword = rs.getString("password");
+                    
+                    // 4. Verifikasi password dengan BCrypt
+                    // BCrypt.checkpw membandingkan password mentah dengan password terenkripsi dari DB
+                    if (BCrypt.checkpw(password, hashedPassword)) {
+                        
+                        JOptionPane.showMessageDialog(this, 
+                            "Login Berhasil!\nSelamat datang, " + rs.getString("name"), 
+                            "Sukses", JOptionPane.INFORMATION_MESSAGE);
+                        
+                        // 5. Buka dashboard utama dan tutup frame login saat ini
+                        new dashboard().setVisible(true);
+                        this.dispose();
+                        //java.awt.EventQueue.invokeLater(() -> new dashboard().setVisible(true));
+                        
+                    } else {
+                        // Password salah
+                        JOptionPane.showMessageDialog(this, 
+                            "Password yang Anda masukkan salah!", 
+                            "Login Gagal", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    // Email tidak ditemukan atau bukan admin
+                    JOptionPane.showMessageDialog(this, 
+                        "Akun Admin dengan email tersebut tidak ditemukan!", 
+                        "Login Gagal", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, 
+            "Gagal melakukan koneksi database:\n" + ex.getMessage(), 
+            "Error Database", JOptionPane.ERROR_MESSAGE);
+        ex.printStackTrace();
+    }
+
+        
+        
     }//GEN-LAST:event_buttonloginActionPerformed
 
     private void switchregistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_switchregistActionPerformed
-        // TODO add your handling code here:
+        new Registrasi().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_switchregistActionPerformed
 
     /**
@@ -178,7 +240,8 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
+       new Login().setVisible(true);
+       //this.dispose();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
