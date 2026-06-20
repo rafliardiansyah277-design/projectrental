@@ -29,6 +29,8 @@ public class hapusunit extends javax.swing.JPanel {
         searchhapus = new javax.swing.JTextField();
         buttondelete = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 153, 51));
+
         searchhapus.setForeground(new java.awt.Color(102, 102, 102));
         searchhapus.setText("Masukkan ID, Merk Mobil, Transmisi, Ukuran");
         searchhapus.addActionListener(this::searchhapusActionPerformed);

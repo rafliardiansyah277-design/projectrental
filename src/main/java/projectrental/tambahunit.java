@@ -52,6 +52,8 @@ public class tambahunit extends javax.swing.JPanel {
         buttontambahunit = new javax.swing.JButton();
         addphoto = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 153, 51));
+
         jLabel1.setText("Merk Mobil");
 
         inputmerk.addActionListener(this::inputmerkActionPerformed);

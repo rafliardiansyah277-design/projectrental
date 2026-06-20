@@ -250,15 +250,17 @@ public dashboard() {
     }//GEN-LAST:event_TambahUnitActionPerformed
 
     private void OrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderActionPerformed
-    cardLayout.show(ContentPanel, "HalamanOrder");
+        panelOrder.loadPendingOrders();
+        cardLayout.show(ContentPanel, "HalamanOrder");
     }//GEN-LAST:event_OrderActionPerformed
 
     private void HapusUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HapusUnitActionPerformed
-    cardLayout.show(ContentPanel, "HalamanHapusUnit");
+        cardLayout.show(ContentPanel, "HalamanHapusUnit");
     }//GEN-LAST:event_HapusUnitActionPerformed
 
     private void ReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnActionPerformed
-        // TODO add your handling code here:
+        panelReturn.loadActiveOrders();
+        cardLayout.show(ContentPanel, "HalamanReturn");
     }//GEN-LAST:event_ReturnActionPerformed
 
     private void IncomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IncomeActionPerformed
