@@ -4,6 +4,11 @@
  */
 package projectrental;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author user dell 7420
@@ -15,6 +20,7 @@ public class income extends javax.swing.JPanel {
      */
     public income() {
         initComponents();
+        loadIncomeData();
     }
 
     /**
@@ -93,6 +99,75 @@ public class income extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    public void loadIncomeData() {
+        DefaultTableModel model = new DefaultTableModel(
+            new String [] {
+                "ID Order", "ID Mobil", "Mobil", "Transmisi", "Tanggal", "Waktu", "Periode", "Nominal", "PIC"
+            }, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // read-only
+            }
+        };
+        
+        tabelincome.setModel(model);
+        
+        String sql = "SELECT r.id as order_id, r.car_id, c.brand, c.transmission, " +
+                     "DATE_FORMAT(r.created_at, '%Y-%m-%d') as tanggal, " +
+                     "DATE_FORMAT(r.created_at, '%H:%i:%s') as waktu, " +
+                     "CONCAT(TIMESTAMPDIFF(HOUR, r.start_time, r.end_time), ' Jam') as periode, " +
+                     "r.total_price, u.name as pic " +
+                     "FROM rentals r " +
+                     "JOIN cars c ON r.car_id = c.id " +
+                     "LEFT JOIN users u ON r.admin_id = u.id " +
+                     "WHERE r.status = 'completed' " +
+                     "ORDER BY r.updated_at DESC";
+                     
+        Connection conn = db.testdatabase.getKoneksi();
+        if (conn == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Gagal menghubungkan ke database!\nPastikan MySQL server di XAMPP sudah dijalankan (Aktif).", 
+                "Koneksi Database Gagal", 
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (Connection c = conn;
+             PreparedStatement stmt = c.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+             
+            java.text.NumberFormat nf = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("id", "ID"));
+            
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                int carId = rs.getInt("car_id");
+                String brand = rs.getString("brand");
+                String transmission = rs.getString("transmission");
+                String tanggal = rs.getString("tanggal");
+                String waktu = rs.getString("waktu");
+                String periode = rs.getString("periode");
+                double nominal = rs.getDouble("total_price");
+                String pic = rs.getString("pic");
+                if (pic == null) pic = "-";
+                
+                model.addRow(new Object[]{
+                    orderId,
+                    carId,
+                    brand,
+                    transmission,
+                    tanggal,
+                    waktu,
+                    periode,
+                    nf.format(nominal),
+                    pic
+                });
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(this, "Gagal memuat data income:\n" + ex.getMessage(), "Error Database", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

@@ -1,6 +1,9 @@
 projectrental\tambahunit.class
 projectrental\hapusunit.class
 projectrental\masterdata.class
+projectrental\income$1.class
+projectrental\hapusunit$1.class
+db\testdatabase.class
 projectrental\Registrasi.class
 projectrental\return1$1.class
 projectrental\Login.class

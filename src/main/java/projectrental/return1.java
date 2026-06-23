@@ -44,6 +44,7 @@ public class return1 extends javax.swing.JPanel {
         int carId;
         String brand;
         String trans;
+        String imagePath;
         double price;
         long timeDiffSec;
         javax.swing.JLabel timeLabel;
@@ -75,9 +76,7 @@ public class return1 extends javax.swing.JPanel {
         jPanel2.removeAll();
         activeCards.clear();
         
-
-        
-        String sql = "SELECT r.id, r.user_id, c.id as car_id, c.brand, c.transmission, r.total_price, " +
+        String sql = "SELECT r.id, r.user_id, c.id as car_id, c.brand, c.transmission, c.image, r.total_price, " +
                      "TIMESTAMPDIFF(SECOND, NOW(), r.end_time) as time_diff_sec " +
                      "FROM rentals r JOIN cars c ON r.car_id = c.id " +
                      "WHERE r.status = 'active'";
@@ -90,17 +89,16 @@ public class return1 extends javax.swing.JPanel {
             while (rs.next()) {
                 String brand = rs.getString("brand");
                 String trans = rs.getString("transmission");
+                String image = rs.getString("image");
                 
                 int rentalId = rs.getInt("id");
-              
-                
                 hasOrders = true;
                 int userId = rs.getInt("user_id");
                 int carId = rs.getInt("car_id");
                 double price = rs.getDouble("total_price");
                 long timeDiffSec = rs.getLong("time_diff_sec");
 
-                RentalCardInfo cardInfo = createReturnItem(rentalId, userId, carId, brand, trans, price, timeDiffSec);
+                RentalCardInfo cardInfo = createReturnItem(rentalId, userId, carId, brand, trans, image, price, timeDiffSec);
                 activeCards.add(cardInfo);
                 jPanel2.add(cardInfo.panel);
                 jPanel2.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -136,7 +134,7 @@ public class return1 extends javax.swing.JPanel {
     }
 
     // 3. Membuat Item Visual Kartu Pengembalian secara dinamis
-    private RentalCardInfo createReturnItem(int rentalId, int userId, int carId, String brand, String trans, double price, long timeDiffSec) {
+    private RentalCardInfo createReturnItem(int rentalId, int userId, int carId, String brand, String trans, String imagePath, double price, long timeDiffSec) {
         boolean overdue = timeDiffSec < 0;
         
         RentalCardInfo card = new RentalCardInfo();
@@ -145,6 +143,7 @@ public class return1 extends javax.swing.JPanel {
         card.carId = carId;
         card.brand = brand;
         card.trans = trans;
+        card.imagePath = imagePath;
         card.price = price;
         card.timeDiffSec = timeDiffSec;
 
@@ -157,8 +156,28 @@ public class return1 extends javax.swing.JPanel {
         card.panel.setMaximumSize(new Dimension(320, 80));
         card.panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        javax.swing.JLabel iconLabel = new javax.swing.JLabel("🚗", javax.swing.SwingConstants.CENTER);
-        iconLabel.setFont(new java.awt.Font("Segoe UI Emoji", java.awt.Font.PLAIN, 32));
+        javax.swing.JLabel iconLabel;
+        if (imagePath != null && !imagePath.trim().isEmpty()) {
+            iconLabel = new javax.swing.JLabel("", javax.swing.SwingConstants.CENTER);
+            try {
+                String imgPath = "d:/coding/Documentation/coolyeah/UAS/rental-mobil/storage/app/public/" + imagePath;
+                java.io.File file = new java.io.File(imgPath);
+                if (file.exists()) {
+                    java.awt.Image img = javax.imageio.ImageIO.read(file);
+                    java.awt.Image scaledImg = img.getScaledInstance(50, 35, java.awt.Image.SCALE_SMOOTH);
+                    iconLabel.setIcon(new javax.swing.ImageIcon(scaledImg));
+                } else {
+                    iconLabel.setText("🚗");
+                    iconLabel.setFont(new java.awt.Font("Segoe UI Emoji", java.awt.Font.PLAIN, 32));
+                }
+            } catch (Exception ex) {
+                iconLabel.setText("🚗");
+                iconLabel.setFont(new java.awt.Font("Segoe UI Emoji", java.awt.Font.PLAIN, 32));
+            }
+        } else {
+            iconLabel = new javax.swing.JLabel("🚗", javax.swing.SwingConstants.CENTER);
+            iconLabel.setFont(new java.awt.Font("Segoe UI Emoji", java.awt.Font.PLAIN, 32));
+        }
 
         JPanel textPanel = new JPanel(new java.awt.GridLayout(2, 1));
         textPanel.setOpaque(false);
@@ -252,6 +271,30 @@ public class return1 extends javax.swing.JPanel {
             jLabel6.setVisible(false);
         }
         
+        // Load Car Image
+        if (card.imagePath != null && !card.imagePath.trim().isEmpty()) {
+            try {
+                String imgPath = "d:/coding/Documentation/coolyeah/UAS/rental-mobil/storage/app/public/" + card.imagePath;
+                java.io.File file = new java.io.File(imgPath);
+                if (file.exists()) {
+                    java.awt.Image img = javax.imageio.ImageIO.read(file);
+                    java.awt.Image scaledImg = img.getScaledInstance(80, 50, java.awt.Image.SCALE_SMOOTH);
+                    jLabel1.setIcon(new javax.swing.ImageIcon(scaledImg));
+                    jLabel1.setText("");
+                } else {
+                    jLabel1.setIcon(null);
+                    jLabel1.setText("No Image");
+                }
+            } catch (Exception ex) {
+                jLabel1.setIcon(null);
+                jLabel1.setText("Error Image");
+                ex.printStackTrace();
+            }
+        } else {
+            jLabel1.setIcon(null);
+            jLabel1.setText("No Image");
+        }
+        
         // Ambil Data Penyewa dari Database
         String userName = "", userPhone = "", userAddress = "", userNik = "";
         try (Connection conn = db.testdatabase.getKoneksi()) {
@@ -289,6 +332,8 @@ public class return1 extends javax.swing.JPanel {
         selectedRentalId = -1;
         selectedCarId = -1;
         selectedClassCard = null;
+        jLabel1.setIcon(null);
+        jLabel1.setText("Foto Mobil");
         jPanel3.setVisible(false);
     }
 
@@ -515,7 +560,9 @@ public class return1 extends javax.swing.JPanel {
             conn.setAutoCommit(false); // Transaksi Database
             try {
                 // 1. Update status sewa di rentals menjadi 'completed' dan simpan total_price akhir + admin_id PIC
-                String rentalSql = "UPDATE rentals SET status = 'completed', total_price = ?, admin_id = ? WHERE id = ?";
+                String rentalSql = isOverdue 
+                    ? "UPDATE rentals SET status = 'completed', total_price = ?, admin_id = ?, penalty_status = 'paid' WHERE id = ?"
+                    : "UPDATE rentals SET status = 'completed', total_price = ?, admin_id = ? WHERE id = ?";
                 try (PreparedStatement stmt = conn.prepareStatement(rentalSql)) {
                     stmt.setDouble(1, finalPrice);
                     stmt.setInt(2, currentAdminId);
@@ -528,14 +575,16 @@ public class return1 extends javax.swing.JPanel {
                     stmt.setInt(1, selectedCarId);
                     stmt.executeUpdate();
                 }
-                // 3. Catat transaksi pengembalian / denda jika ada ke riwayat transaksi
-                String transSql = "INSERT INTO transactions (rental_id, car_id, transaction_type, amount, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())";
-                try (PreparedStatement stmt = conn.prepareStatement(transSql)) {
-                    stmt.setInt(1, selectedRentalId);
-                    stmt.setInt(2, selectedCarId);
-                    stmt.setString(3, isOverdue ? "Denda + Pengembalian" : "Pengembalian");
-                    stmt.setDouble(4, finalPrice);
-                    stmt.executeUpdate();
+                // 3. Catat transaksi denda jika ada ke riwayat transaksi
+                if (isOverdue) {
+                    String transSql = "INSERT INTO transactions (rental_id, car_id, transaction_type, amount, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())";
+                    try (PreparedStatement stmt = conn.prepareStatement(transSql)) {
+                        stmt.setInt(1, selectedRentalId);
+                        stmt.setInt(2, selectedCarId);
+                        stmt.setString(3, "Denda");
+                        stmt.setDouble(4, penaltyAmount);
+                        stmt.executeUpdate();
+                    }
                 }
                 conn.commit(); // Eksekusi sukses
                 

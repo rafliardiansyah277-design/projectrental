@@ -26,6 +26,7 @@ private income panelIncome;
 
 public dashboard() {
     initComponents();
+    this.setExtendedState(MAXIMIZED_BOTH);
  // Inisialisasi semua panel
     panelHapusunit = new hapusunit();
     panelOrder = new order();
@@ -81,10 +82,11 @@ public dashboard() {
         Order = new javax.swing.JButton();
         Return = new javax.swing.JButton();
         Income = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
         ContentPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setExtendedState(MAXIMIZED_BOTH);
         setSize(new java.awt.Dimension(1000, 700));
         getContentPane().setLayout(new java.awt.CardLayout());
 
@@ -176,10 +178,13 @@ public dashboard() {
                 .addComponent(Return, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Income, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(270, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jScrollPane1.addMouseWheelListener(this::jScrollPane1MouseWheelMoved);
+
         ContentPanel.setLayout(new java.awt.CardLayout());
+        jScrollPane1.setViewportView(ContentPanel);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -190,13 +195,12 @@ public dashboard() {
                 .addComponent(panelmenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(helloadmin)
-                                .addGap(309, 309, 309)
+                                .addGap(156, 156, 156)
                                 .addComponent(buttonlogout))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(TambahUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -210,7 +214,8 @@ public dashboard() {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(221, 221, 221)
                         .addComponent(mesinpencari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 295, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -231,9 +236,9 @@ public dashboard() {
                             .addComponent(HapusUnit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGap(12, 12, 12)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12))
         );
 
         getContentPane().add(jPanel1, "card2");
@@ -264,8 +269,8 @@ public dashboard() {
     }//GEN-LAST:event_ReturnActionPerformed
 
     private void IncomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IncomeActionPerformed
-    cardLayout.show(ContentPanel, "HalamanIncome");
-
+        panelIncome.loadIncomeData();
+        cardLayout.show(ContentPanel, "HalamanIncome");
     }//GEN-LAST:event_IncomeActionPerformed
 
     private void buttonlogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonlogoutActionPerformed
@@ -277,6 +282,10 @@ public dashboard() {
     
         
     }//GEN-LAST:event_HapusUnitMouseClicked
+
+    private void jScrollPane1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_jScrollPane1MouseWheelMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jScrollPane1MouseWheelMoved
 
     /**
      * @param args the command line arguments
@@ -317,6 +326,7 @@ public dashboard() {
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mesinpencari;
     private javax.swing.JPanel panelmenu;
     private javax.swing.JLabel textmesinpencari;

@@ -176,6 +176,27 @@ public class tambahunit extends javax.swing.JPanel {
             return;
         }
 
+        String imagePathInDb = "";
+        if (selectedImagePath != null && !selectedImagePath.isEmpty()) {
+            try {
+                File sourceFile = new File(selectedImagePath);
+                if (sourceFile.exists()) {
+                    String fileName = System.currentTimeMillis() + "_" + sourceFile.getName();
+                    String destDir = "d:/coding/Documentation/coolyeah/UAS/rental-mobil/storage/app/public/cars/";
+                    File dir = new File(destDir);
+                    if (!dir.exists()) {
+                        dir.mkdirs();
+                    }
+                    File destFile = new File(dir, fileName);
+                    java.nio.file.Files.copy(sourceFile.toPath(), destFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    imagePathInDb = "cars/" + fileName;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Gagal menyalin foto mobil ke folder Laravel: " + e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
         try (Connection conn = testdatabase.getKoneksi()) {
             String sql = "INSERT INTO cars (brand, size, transmission, plate_number, price_per_hour, status, image, created_at, updated_at) " +
                          "VALUES (?, ?, ?, ?, ?, 'available', ?, NOW(), NOW())";
@@ -185,18 +206,20 @@ public class tambahunit extends javax.swing.JPanel {
                 stmt.setString(3, trans);
                 stmt.setString(4, plate);
                 stmt.setDouble(5, price);
-                stmt.setString(6, ""); // Placeholder image path
+                stmt.setString(6, imagePathInDb); // Simpan path gambar ke DB
                 stmt.executeUpdate();
                 
                 JOptionPane.showMessageDialog(this, "Unit berhasil ditambahkan ke database!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
                 
-                // Reset text fields
+                // Reset text fields & image selection state
                 inputmerk.setText("");
                 inputplatnomor.setText("");
                 inputtransmisi.setText("");
                 inputkursi.setText("");
                 inputperiode.setText("");
                 inputharga.setText("");
+                selectedImagePath = "";
+                addphoto.setText("+add photos");
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Gagal menambahkan unit:\n" + ex.getMessage(), "Error Database", JOptionPane.ERROR_MESSAGE);
@@ -205,17 +228,13 @@ public class tambahunit extends javax.swing.JPanel {
     }//GEN-LAST:event_buttontambahunitActionPerformed
 
     private void addphotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addphotoActionPerformed
-       
-        addphoto.setBackground(Color.WHITE);
-        addphoto.setFocusPainted(false);
-        addphoto.addActionListener(e -> {
-            JFileChooser chooser = new JFileChooser();
-            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                File file = chooser.getSelectedFile();
-                selectedImagePath = file.getAbsolutePath();
-                addphoto.setText(file.getName());
-            }
-        });
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Image Files", "jpg", "jpeg", "png", "webp"));
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            selectedImagePath = file.getAbsolutePath();
+            addphoto.setText(file.getName());
+        }
     }//GEN-LAST:event_addphotoActionPerformed
 
    

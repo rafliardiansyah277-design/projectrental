@@ -3,6 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package projectrental;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -15,6 +20,20 @@ public class hapusunit extends javax.swing.JPanel {
      */
     public hapusunit() {
         initComponents();
+         searchhapus.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (searchhapus.getText().equals("Masukkan ID, Merk Mobil, Transmisi, Ukuran")) {
+                    searchhapus.setText("");
+                }
+            }
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (searchhapus.getText().trim().isEmpty()) {
+                    searchhapus.setText("Masukkan ID, Merk Mobil, Transmisi, Ukuran");
+                }
+            }
+        });
     }
 
     /**
@@ -66,11 +85,98 @@ public class hapusunit extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchhapusActionPerformed
-        // TODO add your handling code here:
+        String keyword = searchhapus.getText().trim();
+        
+        if (keyword.isEmpty() || keyword.equals("Masukkan ID, Merk Mobil, Transmisi, Ukuran")) {
+            JOptionPane.showMessageDialog(this, 
+                "Silakan masukkan ID, Merk, atau No. Polisi mobil yang ingin dihapus!", 
+                "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        Connection conn = db.testdatabase.getKoneksi();
+        if (conn == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Gagal menghubungkan ke database!\nPastikan MySQL di XAMPP sudah dijalankan.", 
+                "Koneksi Database Gagal", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        String selectSql = "SELECT id, brand, plate_number, status, price_per_hour FROM cars " +
+                           "WHERE id = ? OR plate_number = ? OR brand LIKE ?";
+        
+        try (Connection c = conn;
+             PreparedStatement selectStmt = c.prepareStatement(selectSql)) {
+            
+            selectStmt.setString(1, keyword);
+            selectStmt.setString(2, keyword);
+            selectStmt.setString(3, "%" + keyword + "%");
+            
+            try (ResultSet rs = selectStmt.executeQuery()) {
+                if (rs.next()) {
+                    int carId = rs.getInt("id");
+                    String brand = rs.getString("brand");
+                    String plateNumber = rs.getString("plate_number");
+                    String status = rs.getString("status");
+                    double price = rs.getDouble("price_per_hour");
+                    
+                    // JIKA MOBIL SEDANG DISEWA: Cegah penghapusan demi menjaga relasi database
+                    if ("rented".equalsIgnoreCase(status)) {
+                        JOptionPane.showMessageDialog(this, 
+                            "Mobil " + brand + " (" + plateNumber + ") sedang aktif disewa!\n" +
+                            "Unit tidak dapat dihapus saat sedang digunakan penyewa.", 
+                            "Penghapusan Ditolak", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    
+                    java.text.NumberFormat nf = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("id", "ID"));
+                    
+                    int confirm = JOptionPane.showConfirmDialog(this, 
+                        "Unit Mobil Ditemukan:\n\n" +
+                        "ID Mobil: " + carId + "\n" +
+                        "Merk: " + brand + "\n" +
+                        "No. Polisi: " + plateNumber + "\n" +
+                        "Tarif: " + nf.format(price) + "/jam\n" +
+                        "Status: " + status + "\n\n" +
+                        "Apakah Anda yakin ingin menghapus unit mobil ini secara permanen?", 
+                        "Konfirmasi Hapus Unit", 
+                        JOptionPane.YES_NO_OPTION, 
+                        JOptionPane.QUESTION_MESSAGE);
+                        
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        String deleteSql = "DELETE FROM cars WHERE id = ?";
+                        try (PreparedStatement deleteStmt = c.prepareStatement(deleteSql)) {
+                            deleteStmt.setInt(1, carId);
+                            int rowsDeleted = deleteStmt.executeUpdate();
+                            
+                            if (rowsDeleted > 0) {
+                                JOptionPane.showMessageDialog(this, 
+                                    "Unit mobil " + brand + " (" + plateNumber + ") berhasil dihapus dari sistem!", 
+                                    "Sukses", JOptionPane.INFORMATION_MESSAGE);
+                                searchhapus.setText(""); // Bersihkan input pencarian
+                            } else {
+                                JOptionPane.showMessageDialog(this, 
+                                    "Gagal menghapus unit mobil dari database.", 
+                                    "Gagal", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "Unit mobil dengan kata kunci '" + keyword + "' tidak ditemukan!", 
+                        "Tidak Ditemukan", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, 
+                "Terjadi kesalahan saat memproses data:\n" + ex.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_searchhapusActionPerformed
 
     private void buttondeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttondeleteActionPerformed
-        // TODO add your handling code here:
+        buttondeleteActionPerformed(evt);
     }//GEN-LAST:event_buttondeleteActionPerformed
 
 
