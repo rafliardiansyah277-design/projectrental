@@ -67,7 +67,7 @@ public class masterdata extends javax.swing.JPanel {
         // Coba ambil data dari Database
         boolean loadedFromDb = false;
         try (Connection conn = testdatabase.getKoneksi()) {
-            String sql = "SELECT brand, transmission, price_per_hour, plate_number, status FROM cars";
+            String sql = "SELECT brand, transmission, price_per_hour, plate_number, status, image FROM cars";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
@@ -76,38 +76,15 @@ public class masterdata extends javax.swing.JPanel {
                     double price = rs.getDouble("price_per_hour");
                     String plate = rs.getString("plate_number");
                     String status = rs.getString("status");
+                    String image = rs.getString("image");
                     
-                    gridPanel.add(createCarCard(brand, trans, price, plate, status));
+                    gridPanel.add(createCarCard(brand, trans, price, plate, status, image));
                     loadedFromDb = true;
                 }
             }
         } catch (Exception ex) {
             System.err.println("Gagal memuat database, fallback ke dummy data: " + ex.getMessage());
         }
-
-        // Data dummy mobil jika database kosong / error
-        if (!loadedFromDb) {
-            subtitleLabel.setText("Menampilkan unit rental mobil aktif (Fallback Dummy Data)");
-            Object[][] carsData = {
-                {"Toyota Avanza", "Manual", 150000.0, "B 1234 EFG", "Available"},
-                {"Honda Civic Type R", "Automatic", 500000.0, "D 9999 VIP", "Rented"},
-                {"Mitsubishi Xpander", "Automatic", 180000.0, "F 2468 XYZ", "Available"},
-                {"Suzuki Ertiga", "Manual", 140000.0, "L 1357 ABC", "Available"},
-                {"Daihatsu Sigra", "Manual", 120000.0, "B 9012 JKL", "Rented"},
-                {"Toyota Fortuner", "Automatic", 350000.0, "DK 777 GA", "Available"}
-            };
-
-            for (Object[] car : carsData) {
-                gridPanel.add(createCarCard(
-                    (String) car[0], 
-                    (String) car[1], 
-                    (Double) car[2], 
-                    (String) car[3], 
-                    (String) car[4]
-                ));
-            }
-        }
-
 
         // Agar bisa di-scroll jika datanya banyak
         JScrollPane scrollPane = new JScrollPane(gridPanel);
@@ -119,7 +96,7 @@ public class masterdata extends javax.swing.JPanel {
     }
 
     // Fungsi pembantu untuk membuat JPanel berbentuk Card Mobil
-    private JPanel createCarCard(String brand, String transmission, double price, String plate, String status) {
+    private JPanel createCarCard(String brand, String transmission, double price, String plate, String status, String imagePath) {
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(Color.WHITE);
@@ -130,11 +107,39 @@ public class masterdata extends javax.swing.JPanel {
             BorderFactory.createEmptyBorder(15, 15, 15, 15)
         ));
 
-        // 1. Gambar Placeholder
-        JLabel imgPlaceholder = new JLabel("🚗", SwingConstants.CENTER);
-        imgPlaceholder.setFont(new Font("Segoe UI", Font.PLAIN, 48));
+        // 1. Gambar Mobil (Load dinamis)
+        JLabel imgPlaceholder = new JLabel("", SwingConstants.CENTER);
         imgPlaceholder.setAlignmentX(Component.CENTER_ALIGNMENT);
-        imgPlaceholder.setPreferredSize(new Dimension(100, 70));
+        imgPlaceholder.setPreferredSize(new Dimension(140, 90));
+        imgPlaceholder.setMaximumSize(new Dimension(140, 90));
+        imgPlaceholder.setMinimumSize(new Dimension(140, 90));
+
+        boolean imageLoaded = false;
+        if (imagePath != null && !imagePath.trim().isEmpty()) {
+            try {
+                String fullPath = "d:/coding/Documentation/coolyeah/UAS/rental-mobil/storage/app/public/" + imagePath;
+                java.io.File file = new java.io.File(fullPath);
+                if (file.exists()) {
+                    java.awt.Image img = javax.imageio.ImageIO.read(file);
+                    java.awt.Image scaledImg = img.getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH);
+                    imgPlaceholder.setIcon(new ImageIcon(scaledImg));
+                    imageLoaded = true;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (!imageLoaded) {
+            // Placeholder clean jika gambar tidak ditemukan agar tidak memunculkan kotak kosong
+            imgPlaceholder.setText("No Photo");
+            imgPlaceholder.setFont(new Font("Segoe UI", Font.BOLD, 12));
+            imgPlaceholder.setForeground(new Color(150, 150, 150));
+            imgPlaceholder.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(230, 230, 230), 1, true),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+            ));
+        }
 
         // 2. Nama Brand Mobil
         JLabel brandLabel = new JLabel(brand);
