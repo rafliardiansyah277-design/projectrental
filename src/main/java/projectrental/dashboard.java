@@ -68,9 +68,6 @@ public dashboard() {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        mesinpencari = new javax.swing.JPanel();
-        textmesinpencari = new javax.swing.JLabel();
-        buttoncari = new javax.swing.JButton();
         helloadmin = new javax.swing.JLabel();
         buttonlogout = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -92,28 +89,6 @@ public dashboard() {
 
         jPanel1.setBackground(new java.awt.Color(255, 153, 51));
 
-        textmesinpencari.setForeground(new java.awt.Color(204, 204, 204));
-        textmesinpencari.setText("Masukkan Nama Mobil, ID, atau Jenis Transmisi");
-
-        buttoncari.setText("Cari");
-
-        javax.swing.GroupLayout mesinpencariLayout = new javax.swing.GroupLayout(mesinpencari);
-        mesinpencari.setLayout(mesinpencariLayout);
-        mesinpencariLayout.setHorizontalGroup(
-            mesinpencariLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mesinpencariLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(textmesinpencari, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addComponent(buttoncari, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        mesinpencariLayout.setVerticalGroup(
-            mesinpencariLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mesinpencariLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(textmesinpencari, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(buttoncari))
-        );
-
         helloadmin.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         helloadmin.setForeground(new java.awt.Color(51, 51, 51));
         helloadmin.setText("HELLO, ARETA");
@@ -124,7 +99,7 @@ public dashboard() {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua", "Matic", "Manual", "Termurah", "Termahal" }));
 
-        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Filter Berdasarkan:");
 
         TambahUnit.setText("Tambah Unit");
@@ -181,8 +156,10 @@ public dashboard() {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.addMouseWheelListener(this::jScrollPane1MouseWheelMoved);
 
+        ContentPanel.setBackground(new java.awt.Color(255, 255, 255));
         ContentPanel.setLayout(new java.awt.CardLayout());
         jScrollPane1.setViewportView(ContentPanel);
 
@@ -198,7 +175,7 @@ public dashboard() {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 171, Short.MAX_VALUE)
                                 .addComponent(helloadmin)
                                 .addGap(156, 156, 156)
                                 .addComponent(buttonlogout))
@@ -211,10 +188,6 @@ public dashboard() {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(11, 11, 11))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(221, 221, 221)
-                        .addComponent(mesinpencari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -225,9 +198,7 @@ public dashboard() {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(helloadmin)
                     .addComponent(buttonlogout))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mesinpencari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
+                .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelmenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -247,7 +218,8 @@ public dashboard() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void MasterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MasterActionPerformed
-    cardLayout.show(ContentPanel, "HalamanMaster");
+        panelMasterdata.loadKatalogDariDatabase();
+        cardLayout.show(ContentPanel, "HalamanMaster");
     }//GEN-LAST:event_MasterActionPerformed
 
     private void TambahUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TambahUnitActionPerformed
@@ -320,15 +292,12 @@ public dashboard() {
     private javax.swing.JButton Order;
     private javax.swing.JButton Return;
     private javax.swing.JButton TambahUnit;
-    private javax.swing.JButton buttoncari;
     private javax.swing.JButton buttonlogout;
     private javax.swing.JLabel helloadmin;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel mesinpencari;
     private javax.swing.JPanel panelmenu;
-    private javax.swing.JLabel textmesinpencari;
     // End of variables declaration//GEN-END:variables
 }

@@ -45,14 +45,13 @@ public class tambahunit extends javax.swing.JPanel {
         inputtransmisi = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         inputkursi = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        inputperiode = new javax.swing.JTextField();
         inputharga = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         buttontambahunit = new javax.swing.JButton();
         addphoto = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 153, 51));
+        setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel1.setText("Merk Mobil");
 
@@ -64,9 +63,7 @@ public class tambahunit extends javax.swing.JPanel {
 
         jLabel4.setText("Jumlah Kursi");
 
-        jLabel5.setText("Periode");
-
-        jLabel6.setText("Harga");
+        jLabel6.setText("Harga/Jam");
 
         buttontambahunit.setBackground(new java.awt.Color(51, 255, 0));
         buttontambahunit.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -75,7 +72,6 @@ public class tambahunit extends javax.swing.JPanel {
 
         addphoto.setText("+add photos");
         addphoto.setBorder(null);
-        addphoto.setBorderPainted(false);
         addphoto.setContentAreaFilled(false);
         addphoto.addActionListener(this::addphotoActionPerformed);
 
@@ -86,18 +82,8 @@ public class tambahunit extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(inputperiode, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                        .addGap(343, 343, 343))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(buttontambahunit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(inputharga, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(buttontambahunit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(60, 60, 60))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -105,7 +91,7 @@ public class tambahunit extends javax.swing.JPanel {
                             .addComponent(inputtransmisi, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(inputplatnomor, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(inputmerk, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
                         .addComponent(addphoto)
                         .addGap(128, 128, 128))
                     .addGroup(layout.createSequentialGroup()
@@ -114,7 +100,12 @@ public class tambahunit extends javax.swing.JPanel {
                             .addComponent(jLabel2)
                             .addComponent(jLabel4)
                             .addComponent(jLabel3))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(inputharga, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,16 +129,12 @@ public class tambahunit extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(inputkursi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
+                .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inputperiode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inputharga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(inputharga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(buttontambahunit)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -216,7 +203,6 @@ public class tambahunit extends javax.swing.JPanel {
                 inputplatnomor.setText("");
                 inputtransmisi.setText("");
                 inputkursi.setText("");
-                inputperiode.setText("");
                 inputharga.setText("");
                 selectedImagePath = "";
                 addphoto.setText("+add photos");
@@ -246,14 +232,12 @@ public class tambahunit extends javax.swing.JPanel {
     private javax.swing.JTextField inputharga;
     private javax.swing.JTextField inputkursi;
     private javax.swing.JTextField inputmerk;
-    private javax.swing.JTextField inputperiode;
     private javax.swing.JTextField inputplatnomor;
     private javax.swing.JTextField inputtransmisi;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     // End of variables declaration//GEN-END:variables
 }

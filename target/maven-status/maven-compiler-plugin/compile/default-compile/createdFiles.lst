@@ -1,3 +1,5 @@
+projectrental\CarCardGUI.class
+projectrental\income$2.class
 projectrental\tambahunit.class
 projectrental\hapusunit.class
 projectrental\masterdata.class
@@ -6,6 +8,10 @@ projectrental\hapusunit$1.class
 db\testdatabase.class
 projectrental\Registrasi.class
 projectrental\return1$1.class
+projectrental\invoices.class
+projectrental\invoices$2.class
+projectrental\invoices$1.class
+projectrental\invoices$2$1.class
 projectrental\Login.class
 projectrental\CarCard.class
 projectrental\return1.class

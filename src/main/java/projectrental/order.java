@@ -219,6 +219,8 @@ public class order extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(255, 153, 51));
 
+        detailPanel.setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel6.setText("mobil (transmisi)");
 
         jLabel7.setText("harga");
@@ -314,6 +316,7 @@ public class order extends javax.swing.JPanel {
                     .addComponent(tolak)))
         );
 
+        listPanel.setBackground(new java.awt.Color(255, 255, 255));
         listPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel1.setText("foto");

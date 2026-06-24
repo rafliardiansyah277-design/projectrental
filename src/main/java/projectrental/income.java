@@ -21,6 +21,14 @@ public class income extends javax.swing.JPanel {
     public income() {
         initComponents();
         loadIncomeData();
+        
+        // Listener click baris tabel untuk memunculkan invoice
+        tabelincome.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelincomeMouseClicked(evt);
+            }
+        });
     }
 
     /**
@@ -121,7 +129,7 @@ public class income extends javax.swing.JPanel {
                      "FROM rentals r " +
                      "JOIN cars c ON r.car_id = c.id " +
                      "LEFT JOIN users u ON r.admin_id = u.id " +
-                     "WHERE r.status = 'completed' " +
+                     "WHERE r.status IN ('active', 'completed') " +
                      "ORDER BY r.updated_at DESC";
                      
         Connection conn = db.testdatabase.getKoneksi();
@@ -166,6 +174,27 @@ public class income extends javax.swing.JPanel {
         } catch (Exception ex) {
             ex.printStackTrace();
             javax.swing.JOptionPane.showMessageDialog(this, "Gagal memuat data income:\n" + ex.getMessage(), "Error Database", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void tabelincomeMouseClicked(java.awt.event.MouseEvent evt) {
+        int selectedRow = tabelincome.getSelectedRow();
+        if (selectedRow != -1) {
+            // Mengambil data dari baris yang dipilih
+            String idOrder = tabelincome.getValueAt(selectedRow, 0).toString();
+            String idMobil = tabelincome.getValueAt(selectedRow, 1).toString();
+            String mobil = tabelincome.getValueAt(selectedRow, 2).toString();
+            String transmisi = tabelincome.getValueAt(selectedRow, 3).toString();
+            String tanggal = tabelincome.getValueAt(selectedRow, 4).toString();
+            String waktu = tabelincome.getValueAt(selectedRow, 5).toString();
+            String periode = tabelincome.getValueAt(selectedRow, 6).toString();
+            String nominal = tabelincome.getValueAt(selectedRow, 7).toString();
+            String pic = tabelincome.getValueAt(selectedRow, 8).toString();
+            
+            // Membuka JDialog invoices kustom secara terpisah
+            java.awt.Frame parentFrame = (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this);
+            invoices dialog = new invoices(parentFrame, true, idOrder, idMobil, mobil, transmisi, tanggal, waktu, periode, nominal, pic);
+            dialog.setVisible(true);
         }
     }
 
